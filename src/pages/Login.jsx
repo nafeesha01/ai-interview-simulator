@@ -1,132 +1,126 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-
 import API from "../services/api"
 
 function Login() {
 
-  const navigate = useNavigate()
+const navigate = useNavigate()
 
-  const [email, setEmail] =
-    useState("")
+const [email, setEmail] = useState("")
+const [password, setPassword] = useState("")
 
-  const [password, setPassword] =
-    useState("")
+const handleLogin = async () => {
 
-  async function handleLogin() {
+try {
 
-    try {
+const response = await API.post(
+"/users/login",
+{
+email,
+password
+}
+)
 
-      const response =
-        await API.post(
+localStorage.setItem(
+"token",
+response.data.token
+)
 
-          "/users/login",
+navigate("/dashboard")
 
-          {
-            email,
-            password
-          }
+}
 
-        )
+catch(error){
 
-      localStorage.setItem(
+console.log(error)
 
-        "token",
-        response.data.token
+alert("Login failed")
 
-      )
+}
 
-      alert(
-        response.data.message
-      )
+}
 
-      navigate("/")
+return (
 
-    }
+<div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-black via-gray-900 to-blue-950 px-4">
 
-    catch(error){
+<div className="w-full max-w-md bg-gray-900/80 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-2xl">
 
-      alert(
+<h1 className="text-3xl font-bold text-white text-center mb-8">
 
-        error.response?.data?.message ||
+Login
 
-        "Login failed"
+</h1>
 
-      )
+<input
 
-    }
+type="email"
+placeholder="Enter Email"
 
-  }
+value={email}
 
-  return (
+onChange={(e)=>
+setEmail(e.target.value)
+}
 
-    <div className="min-h-screen flex justify-center items-center">
+className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-600 outline-none mb-4"
+/>
 
-      <div className="border p-8 rounded-xl w-[400px] shadow-lg">
+<input
 
-        <h1 className="text-3xl font-bold text-center">
+type="password"
+placeholder="Enter Password"
 
-          Login
+value={password}
 
-        </h1>
+onChange={(e)=>
+setPassword(e.target.value)
+}
 
-        <input
+className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-600 outline-none mb-6"
+/>
 
-          type="email"
+<button
 
-          placeholder="Enter Email"
+onClick={handleLogin}
 
-          value={email}
+className="w-full bg-blue-600 hover:bg-blue-700 transition text-white py-3 rounded-lg font-semibold"
 
-          onChange={(e)=>
+>
 
-            setEmail(
-              e.target.value
-            )
+Login
 
-          }
+</button>
 
-          className="border p-3 rounded-lg w-full mt-6"
+<div className="mt-6 text-center">
 
-        />
+<p className="text-gray-400">
 
-        <input
+New here?{" "}
 
-          type="password"
+<span
 
-          placeholder="Enter Password"
+onClick={()=>
+navigate("/signup")
+}
 
-          value={password}
+className="text-blue-400 font-semibold cursor-pointer hover:text-blue-300"
 
-          onChange={(e)=>
+>
 
-            setPassword(
-              e.target.value
-            )
+Sign Up
 
-          }
+</span>
 
-          className="border p-3 rounded-lg w-full mt-4"
+</p>
 
-        />
+</div>
 
-        <button
+</div>
 
-          onClick={handleLogin}
+</div>
 
-          className="bg-blue-600 text-white p-3 rounded-lg w-full mt-6"
-
-        >
-
-          Login
-
-        </button>
-
-      </div>
-
-    </div>
-
-  )
+)
 
 }
 
