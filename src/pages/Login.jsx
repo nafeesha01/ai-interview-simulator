@@ -3,125 +3,101 @@ import { useNavigate } from "react-router-dom"
 import API from "../services/api"
 
 function Login() {
+  const navigate = useNavigate()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
 
-const navigate = useNavigate()
+  const handleLogin = async () => {
+    setError("")
+    setLoading(true)
+    try {
+      const response = await API.post("/users/login", { email, password })
+      localStorage.setItem("token", response.data.token)
+      navigate("/dashboard")
+    } catch (err) {
+      console.log(err)
+      setError("Invalid email or password")
+    } finally {
+      setLoading(false)
+    }
+  }
 
-const [email, setEmail] = useState("")
-const [password, setPassword] = useState("")
+  function handleKeyDown(e) {
+    if (e.key === "Enter") handleLogin()
+  }
 
-const handleLogin = async () => {
+  return (
+    <div className="min-h-screen bg-[#0A0A0F] flex items-center justify-center px-4">
+      <div className="w-full max-w-sm">
 
-try {
+        {/* Logo */}
+        <div className="flex items-center gap-2.5 justify-center mb-10">
+          <div className="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <circle cx="8" cy="8" r="6" stroke="white" strokeWidth="1.5" />
+              <path d="M5 8l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+          <span className="text-sm font-semibold text-white">InterviewAI</span>
+        </div>
 
-const response = await API.post(
-"/users/login",
-{
-email,
-password
-}
-)
+        <div className="bg-[#111118] border border-white/5 rounded-2xl p-8">
+          <h1 className="text-lg font-semibold text-white mb-1">Sign in</h1>
+          <p className="text-sm text-gray-500 mb-7">Welcome back</p>
 
-localStorage.setItem(
-"token",
-response.data.token
-)
+          <div className="flex flex-col gap-3">
+            <div>
+              <label className="text-xs text-gray-500 mb-1.5 block">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="you@example.com"
+                className="w-full px-3.5 py-2.5 text-sm bg-[#0A0A0F] border border-white/5 rounded-lg text-white placeholder-gray-700 outline-none focus:border-indigo-500/40 transition-colors"
+              />
+            </div>
 
-navigate("/dashboard")
+            <div>
+              <label className="text-xs text-gray-500 mb-1.5 block">Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="••••••••"
+                className="w-full px-3.5 py-2.5 text-sm bg-[#0A0A0F] border border-white/5 rounded-lg text-white placeholder-gray-700 outline-none focus:border-indigo-500/40 transition-colors"
+              />
+            </div>
+          </div>
 
-}
+          {error && (
+            <p className="text-xs text-red-400 mt-3">{error}</p>
+          )}
 
-catch(error){
+          <button
+            onClick={handleLogin}
+            disabled={loading}
+            className="w-full mt-6 py-2.5 rounded-lg text-sm font-semibold bg-indigo-500 hover:bg-indigo-400 disabled:opacity-50 text-white transition-colors duration-150"
+          >
+            {loading ? "Signing in…" : "Sign in"}
+          </button>
 
-console.log(error)
-
-alert("Login failed")
-
-}
-
-}
-
-return (
-
-<div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-black via-gray-900 to-blue-950 px-4">
-
-<div className="w-full max-w-md bg-gray-900/80 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-2xl">
-
-<h1 className="text-3xl font-bold text-white text-center mb-8">
-
-Login
-
-</h1>
-
-<input
-
-type="email"
-placeholder="Enter Email"
-
-value={email}
-
-onChange={(e)=>
-setEmail(e.target.value)
-}
-
-className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-600 outline-none mb-4"
-/>
-
-<input
-
-type="password"
-placeholder="Enter Password"
-
-value={password}
-
-onChange={(e)=>
-setPassword(e.target.value)
-}
-
-className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-600 outline-none mb-6"
-/>
-
-<button
-
-onClick={handleLogin}
-
-className="w-full bg-blue-600 hover:bg-blue-700 transition text-white py-3 rounded-lg font-semibold"
-
->
-
-Login
-
-</button>
-
-<div className="mt-6 text-center">
-
-<p className="text-gray-400">
-
-New here?{" "}
-
-<span
-
-onClick={()=>
-navigate("/signup")
-}
-
-className="text-blue-400 font-semibold cursor-pointer hover:text-blue-300"
-
->
-
-Sign Up
-
-</span>
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-)
-
+          <p className="text-center text-xs text-gray-600 mt-6">
+            No account?{" "}
+            <span
+              onClick={() => navigate("/signup")}
+              className="text-indigo-400 cursor-pointer hover:text-indigo-300"
+            >
+              Create one
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default Login

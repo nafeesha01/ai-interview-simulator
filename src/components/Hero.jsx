@@ -1,34 +1,23 @@
-function Hero(){
+function Hero() {
+  return (
+    <div className="max-w-6xl mx-auto px-8 pt-24 pb-16 flex flex-col items-center text-center">
 
-return(
+      <div className="inline-flex items-center gap-2 border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 text-xs font-medium px-4 py-1.5 rounded-full mb-8">
+        <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+        AI-powered mock interviews
+      </div>
 
-<div className="flex flex-col items-center mt-24">
+      <h1 className="text-6xl font-bold text-white leading-[1.1] tracking-tight max-w-3xl">
+        Practise until the
+        <br />
+        <span className="text-indigo-400">real thing feels easy</span>
+      </h1>
 
-<div className="backdrop-blur-xl bg-white/10 border border-white/10 rounded-full px-6 py-2">
-
-✨ AI Powered Mock Interviews
-</div>
-
-<h1 className="text-7xl font-bold text-center mt-8 leading-tight">
-
-Master <span className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-
-Every Interview
-
-</span>
-
-</h1>
-
-<p className="w-[750px] text-center text-gray-300 mt-8 text-lg">
-
-Generate personalized interview questions, practice with voice interaction and receive AI feedback with analytics.
-
-</p>
-
-</div>
-
-)
-
+      <p className="max-w-xl text-gray-400 mt-6 text-base leading-relaxed">
+        Role-specific questions, voice input, and instant AI feedback — so you walk into every interview knowing exactly what to expect.
+      </p>
+    </div>
+  )
 }
 
 export default Hero
